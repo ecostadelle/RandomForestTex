@@ -45,7 +45,7 @@
 \maketitle
 
 \begin{resumo} 
-  A popularidade das árvores de decisão é atribuída a sua estrutura simples e bastante compreensível. Porém o problema do sobreajuste exige que outros métodos sejam empregados. A utilização de algoritmos híbridos tem sido bem significativos, principalmente pela boa acurácia na previsão, velocidade de computação e ampla disponibilidade de software. Algoritmos, como o \emph{Random Forest} combinam outros algoritmos, a exemplo do \emph{Bagging} e do subespaço aleatório para classificação ou regressão em aprendizado de máquina. Esse trabalho apresenta um exemplo de uso do \textit{Random Forest} como classificador, bem como detalha alguns aspectos importantes da implementação. O código fonte e as fontes de dados estão disponíveis no \href{https://github.com/ecostadelle/SBC}{GitHub}.
+  A popularidade das árvores de decisão é atribuída a sua estrutura simples e bastante compreensível. Porém o problema do sobreajuste exige que outros métodos sejam empregados. A utilização de algoritmos híbridos tem sido bem significativos, principalmente pela boa acurácia na previsão, velocidade de computação e ampla disponibilidade de software. Algoritmos, como o \emph{Random Forest} combinam outros algoritmos, a exemplo do \emph{Bagging} e do subespaço aleatório para classificação ou regressão em aprendizado de máquina. Esse trabalho apresenta um exemplo de uso do \textit{Random Forest} como classificador, bem como detalha alguns aspectos importantes da implementação. O código fonte e as fontes de dados estão disponíveis no \href{https://github.com/ecostadelle/RandomForestTex}{GitHub}.
 \end{resumo}
 
 
@@ -159,7 +159,7 @@ from sklearn.ensemble import RandomForestClassifier
 
 github = (
     'https://raw.githubusercontent.com/ecostadelle/'+
-    'RandomForest/main/db/transforma.csv')
+    'RandomForestTex/main/db/transforma.csv')
 df = pd.read_csv(github, sep = ';',decimal=",")
 X = df[['ira_nb1', 'ira_mr1', 'ira_nb3', 'rec_s1']]
 y = y=df[['resultado_final']]
