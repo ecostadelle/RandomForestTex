@@ -15,162 +15,194 @@
 \documentclass[12pt]{article}
 
 \usepackage{sbc-template}
+\usepackage{float}
 
 \usepackage{graphicx,url}
 
-%\usepackage[brazil]{babel}   
+\usepackage[brazil]{babel}   
 \usepackage[utf8]{inputenc}  
+\usepackage{minted}
 
-     
+\renewcommand{\listingscaption}{Código}
+
 \sloppy
 
-\title{Instructions for Authors of SBC Conferences\\ Papers and Abstracts}
+\title{Floresta de árvores aleatórias \\ no contexto da estrutura de dados e algoritmos}
 
-\author{Luciana P. Nedel\inst{1}, Rafael H. Bordini\inst{2}, Flávio Rech
-  Wagner\inst{1}, Jomi F. Hübner\inst{3} }
+\author{Ewerton L. Costadelle\inst{1}$^{,}$\inst{2}, Rafael N. de Carvalho\inst{1}$^{,}$\inst{2}}
 
-
-\address{Instituto de Informática -- Universidade Federal do Rio Grande do Sul
-  (UFRGS)\\
-  Caixa Postal 15.064 -- 91.501-970 -- Porto Alegre -- RS -- Brazil
+\address{Instituto de Computação (UFF)\\
+  Av. Gal. Milton Tavares de Souza, s/nº, São Domingos - Niterói, RJ -- Brasil
 \nextinstitute
-  Department of Computer Science -- University of Durham\\
-  Durham, U.K.
-\nextinstitute
-  Departamento de Sistemas e Computação\\
-  Universidade Regional de Blumenal (FURB) -- Blumenau, SC -- Brazil
-  \email{\{nedel,flavio\}@inf.ufrgs.br, R.Bordini@durham.ac.uk,
-  jomi@inf.furb.br}
+  Instituto Federal de Educação, Ciência e Tecnologia de Rondônia\\
+  Av. Lauro Sodré, 6500 - Censipam - Aeroporto, Porto Velho,RO -- Brazil
+  \email{ecostadelle@id.uff.br, rafaelnink@id.uff.br}
 }
 
 \begin{document} 
 
 \maketitle
 
-\begin{abstract}
-  This meta-paper describes the style to be used in articles and short papers
-  for SBC conferences. For papers in English, you should add just an abstract
-  while for the papers in Portuguese, we also ask for an abstract in
-  Portuguese (``resumo''). In both cases, abstracts should not have more than
-  10 lines and must be in the first page of the paper.
-\end{abstract}
-     
 \begin{resumo} 
-  Este meta-artigo descreve o estilo a ser usado na confecção de artigos e
-  resumos de artigos para publicação nos anais das conferências organizadas
-  pela SBC. É solicitada a escrita de resumo e abstract apenas para os artigos
-  escritos em português. Artigos em inglês deverão apresentar apenas abstract.
-  Nos dois casos, o autor deve tomar cuidado para que o resumo (e o abstract)
-  não ultrapassem 10 linhas cada, sendo que ambos devem estar na primeira
-  página do artigo.
+  A popularidade das árvores de decisão é atribuída a sua estrutura simples e bastante compreensível. Porém o problema do sobreajuste exige que outros métodos sejam empregados. A utilização de algoritmos híbridos tem sido bem significativos, principalmente pela boa acurácia na previsão, velocidade de computação e ampla disponibilidade de software. Algoritmos, como o \emph{Random Forest} combinam outros algoritmos, a exemplo do \emph{Bagging} e do subespaço aleatório para classificação ou regressão em aprendizado de máquina. Esse trabalho apresenta um exemplo de uso do \textit{Random Forest} como classificador, bem como detalha alguns aspectos importantes da implementação.
 \end{resumo}
 
 
-\section{General Information}
+\section{Introdução}
 
-All full papers and posters (short papers) submitted to some SBC conference,
-including any supporting documents, should be written in English or in
-Portuguese. The format paper should be A4 with single column, 3.5 cm for upper
-margin, 2.5 cm for bottom margin and 3.0 cm for lateral margins, without
-headers or footers. The main font must be Times, 12 point nominal size, with 6
-points of space before each paragraph. Page numbers must be suppressed.
+A pesquisa em árvores de classificação e regressão teve um rápido crescimento e as aplicações aumentaram a uma taxa ainda maior. A popularidade das árvores é atribuída a sua estrutura simples e bastante compreensível. Outro fator é que possuem razoavelmente boa acurácia na previsão, velocidade de computação e ampla disponibilidade de software \cite{Loh_2014}. O ponto negativo das árvores é que elas podem se ajustar quase perfeitamente aos dados de treinamento e ficar pouco eficientes para a generalização. Esse é um conhecido problema de sobreajuste e para evitá-lo, costuma-se fazer a "poda" da árvore \cite{Grus_2019}.
 
-Full papers must respect the page limits defined by the conference.
-Conferences that publish just abstracts ask for \textbf{one}-page texts.
+Outra possibilidade que tem ganhado destaque é a utilização de algoritmos híbridos. Recentemente, devido a evolução do poder computacional, os algoritmos \emph{ensembles} despertaram o interesse de pesquisadores da área da aprendizagem de máquina. Essa significância deve-se ao fato de que o híbridos combinam vários outros algoritmos para produzir uma única previsão. Dentre os quais, pode-se destacar o \textit{Random Forest}, ou Floresta de Árvores Aleatórias. Que é um híbrido do algoritmo \emph{Bagging} e do método de subespaço aleatório e usa árvores de decisão como classificador \cite{Buhmann_2011}.
 
-\section{First Page} \label{sec:firstpage}
+O objetivo deste trabalho é apresentar um exemplo de uso do \textit{Random Forest} como classificador, bem como detalhar alguns aspectos importantes da implementação. Pretende-se que o leitor possa entender o funcionamento dos algoritmos que compões esse hibrido.
 
-The first page must display the paper title, the name and address of the
-authors, the abstract in English and ``resumo'' in Portuguese (``resumos'' are
-required only for papers written in Portuguese). The title must be centered
-over the whole page, in 16 point boldface font and with 12 points of space
-before itself. Author names must be centered in 12 point font, bold, all of
-them disposed in the same line, separated by commas and with 12 points of
-space after the title. Addresses must be centered in 12 point font, also with
-12 points of space after the authors' names. E-mail addresses should be
-written using font Courier New, 10 point nominal size, with 6 points of space
-before and 6 points of space after.
+\section{Antes da floresta havia a árvore} \label{sec:firstpage}
 
-The abstract and ``resumo'' (if is the case) must be in 12 point Times font,
-indented 0.8cm on both sides. The word \textbf{Abstract} and \textbf{Resumo},
-should be written in boldface and must precede the text.
+Árvores de decisão são estruturas muito simples e com alto grau de interpretabilidade. Esse método, utilizado tanto para classificação quanto para regressão, foi proposto há quase 60 anos por \cite{Morgan_1963} e desde então teve muitas variações.
 
-\section{CD-ROMs and Printed Proceedings}
-
-In some conferences, the papers are published on CD-ROM while only the
-abstract is published in the printed Proceedings. In this case, authors are
-invited to prepare two final versions of the paper. One, complete, to be
-published on the CD and the other, containing only the first page, with
-abstract and ``resumo'' (for papers in Portuguese).
-
-\section{Sections and Paragraphs}
-
-Section titles must be in boldface, 13pt, flush left. There should be an extra
-12 pt of space before each title. Section numbering is optional. The first
-paragraph of each section should not be indented, while the first lines of
-subsequent paragraphs should be indented by 1.27 cm.
-
-\subsection{Subsections}
-
-The subsection titles must be in boldface, 12pt, flush left.
-
-\section{Figures and Captions}\label{sec:figs}
-
-
-Figure and table captions should be centered if less than one line
-(Figure~\ref{fig:exampleFig1}), otherwise justified and indented by 0.8cm on
-both margins, as shown in Figure~\ref{fig:exampleFig2}. The caption font must
-be Helvetica, 10 point, boldface, with 6 points of space before and after each
-caption.
+Basicamente, uma árvore é uma estrutura hierárquica que particiona dados de modo a torná-los mais homogêneos possível. Ela subdivide um conjunto amostral com base nos seus atributos. É mais intuitiva a seleção de atributos categóricos, porém, atributos numéricos carecem de uma definição do melhor ponto para fazer o corte. No exemplo da Figura \ref{Fig1} o nó raiz particiona o conjunto de flores pela largura de suas pétalas. Ainda no exemplo, serão direcionadas ao nó da esquerda aquelas que tiverem largura menor que 2.45. Consequentemente, larguras maiores ou iguais a 2.45 serão direcionadas ao nó da direita, de modo que novos particionamentos podem ser feitos, até que nós folhas sejam tão homogêneos quanto o desejado. E é majoritariamente, no modo como o algoritmo faz esse particionamento é que define qual é o seu modelo.
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=.5\textwidth]{fig1.jpg}
-\caption{A typical figure}
-\label{fig:exampleFig1}
+\includegraphics[width=.5\textwidth]{fig1.png}
+\caption{Exemplo de uma árvore de decisão. Fonte \cite{Loh_2014}}
+\label{Fig1}
 \end{figure}
 
-\begin{figure}[ht]
+O modelo AID (\emph{Automatic Interaction Detection}) proposto por \cite{Morgan_1963}, varre o vetor do atributo sempre separando o conjunto em dois. A cada particionamento é calculado o erro pelo método dos mínimos quadrados. O ponto de partição que obtiver menor erro é o selecionado. A seleção da raiz de uma subárvore também é baseada no erro quadrático médio, após obter o ponto de corte e o erro de todos os atributos, seleciona-se a raiz. O processo é iterado até que se atinja condições de seleção definidas previamente.
+
+Outros modelos acrescentaram padrões utilizados até os dias de hoje, o THAID (\emph{THeta Automatic Interaction Detection}) \cite{Messenger1972} introduziu os conceitos de entropia e índice de Gini na seleção do nó raiz. E o CART (\emph{Classification And Regression Trees}), proposto por \cite{Breiman1984}, utilizou divisões em combinações lineares de variáveis, por busca estocástica e resolveu problemas de valores de dados ausentes em um nó.
+
+O algoritmo  \textit{Iterative Dichotomiser} 3 (ID3) introduzido  por  \cite{quinlan1986} é elaborado a partir de uma sistemas de inferência, gerando uma árvore da raiz às folhas usando o ganho de informação para definir a melhor raiz, de forma recursiva encontra-se o melhor filho, ou seja, o atributo que melhor divide o conjunto de dados, seguindo até as folhas. Possui limitação quanto aos tipos de dados, sendo necessário que este sejam categóricos não ordinais, desta forma o C4.5 apresenta-se como uma evolução trabalhando com dados contínuos, além de tratar dados desconhecidos, ou seja, não presente nos dados de testes, ainda apresenta um método de pós-poda para avaliar desempenho.
+
+\subsection{Das métricas}
+
+Diversas métricas são comumente utilizadas na construção das árvores de decisão, como: grau de entropia, ganho de informação
+
+O grau de entropia, dada uma amostra(S) com resultados positivos (+) e negativos (–) de algum conceito alvo, para uma classificação booleana definido pela expressão é
+\begin{equation}
+    Entropia(S) \equiv -p_+ \log_2 p_+ - p_- \log_2 p_-
+\end{equation}
+tendo como resultados no intervalo $[0,1]$, quanto mais próximos de 1, menor a dúvida na classificação.
+
+De forma genérica, se atributo alvo aceitar $c$ diferentes valores, a entropia de $S$ relativa a esta classificação c–classes é definida como:
+\begin{equation}
+    Entropia(S) \equiv \sum_{i=1}^{c} -p_i \log_2 p_i
+\end{equation}
+sendo $p_i$ a proporção de $S$ pertencendo a classe $i$.
+
+Neste contexto a entropia refere-se a aleatoriedade de uma variável prever a classe,  enquanto a métrica ganho de informação representa a redução da entropia causada pela divisão dos exemplos de acordo com os valores do atributo, sendo expressa:
+\begin{equation}
+    Gain(S,A) \equiv Entropia(S) - \sum_{v \in valores(A)} \frac{|S_v|}{|S|} Entropia(S_v)
+\end{equation}
+redução esperada na entropia causada gerada pela divisão dos exemplos de acordo com este atributo A.
+
+
+\subsection{Submétodos combinados para formar a floresta}
+
+O \textit{Random Forest}, é um algoritmo híbrido, que além de árvores de decisão, utiliza de métodos de agregação e a subdivisão do espaço amostral. Utiliza o \textit{Bagging}, que é um método de estimação de parâmetros com alto poder de extrair informação dos dados. Nesse contexto, seria um erro traduzir \textit{bagging} com qualquer variação do verbo empacotar, principalmente porque pouco teria a ver com a ideia que o motiva. De fato, o autor \cite{Breiman_1996} o descreveu como o acrônomio de \emph{\textbf{b}ootstrap} \emph{\textbf{agg}regat\textbf{ing}}, ou seja, é um agregador de preditores baseados na técnica \textit{bootstrap} de reamostragem. 
+
+Por sua vez, o \textit{bootstrap} é uma técnica de reamostragem proposta por \cite{Efron_1993} que consiste em remover e repor aleatoriamente uma porcentagem de amostras de um conjunto de dados para estimar alguns parâmetros. Com base no novo conjunto de dados, problemas como a falta de normalidade são contornados, permitindo a inferência estatística e determinação de parâmetros, como intervalos de confiança, de modo analítico. É um método estatístico que ficou popular com o aumento do poder computacional, principalmente a partir da década de 1990.
+
+No código, abaixo, um conjunto de dados com tamanho amostral $n=6$ foi reamostrado $N_{boot}=400$ vezes. O sorteio foi feito utilizando o gerador de números pseudo-aleatórios da biblioteca \textit{NumPy}\cite{Harris_2020}. De modo que, $x$ armazena os índices (randomizados) que compuseram o novo conjunto de dados. Nesse sentido, a complexidade assintótica do método depende de $O(N_{boot}) \times O(n)$, ou simplesmente, $O(n)$.
+
+\begin{listing}[!ht]
+\begin{minted}[frame=lines,fontsize=\footnotesize]{python}
+import numpy as np
+porosity = [30.3, 21.0, 19.2, 29.1, 21.9, 23.1]
+Nboot = 400
+def bootstrap(x, Nboot, statfun):
+    x = np.array(x)
+    resampled_stat = []
+    for b in range(Nboot):
+        index = np.random.randint(0,len(x),len(x))
+        sample = x[index]
+        bstatistic = statfun(sample)
+        resampled_stat.append(bstatistic)
+    return np.array(resampled_stat)
+porosity_bootstrap = bootstrap(porosity, Nboot, np.mean)
+\end{minted}
+\caption{Exemplo de \emph{bootstrapping} em Python}
+\end{listing}
+
+
+No caminho de explicar a origem do nome, os autores do método de \textit{bootstrap} \cite{Efron_1993} o referenciaram a um conto alemão do século XVIII denominado As Aventuras do Barão de Münchhausen (em tradução livre), de Rudolph Erich Raspe. Em um trecho do livro, o barão escapa de um pântano puxando (a si próprio) pela cinta das próprias botas. É uma alegoria que tenta retratar algo, ou alguém, que consegue evoluir partindo do nada e pelos próprios meios.
+
+Uma outra alegoria que circunda o tema está na na conclusão do artigo denominado \emph{Bagging Predictors}. O autor \cite{Breiman_1996} utiliza o contrassenso de um provérbio dizendo que utilizar o método de \emph{Bagging} em preditores, é uma maneira de fazer "uma bolsa de seda a partir da orelha de uma porca" e completa, "especialmente se a orelha da porca estiver trêmula". 
+
+Na prática, o que o método de \emph{Bagging} faz é produzir varias versões do conjunto de amostras para depois criar conjuntos de treino $\mathcal{L}$ e teste $\mathcal{T}$. Para se ter noção, no artigo que apresentou o método, o autor transformou um conjunto de 200 amostras em 2000, de modo que, 200 foram utilizadas como treinamento de uma árvore de decisão e 1800 como teste.
+
+Nesse sentido, um conjunto de árvores com \textit{bagging} (\textit{Bagging Trees}) é um método em que na construção de cada árvore é feita uma seleção aleatória a partir dos exemplos do conjunto de treinamento. 
+
+Ampliando, surge a possibilidade de escolha aleatória de $n$ diferentes subconjuntos de preditores, a partir do espaço de preditores original, para treinar $n$ classificadores, com isso, cada elemento do conjunto será treinado com apenas uma porção das preditores, permitindo classificar uma amostra com preditores ausentes ao selecionar os elementos do conjunto treinados somente com os preditores disponíveis no dado a ser classificado, esse método é chamado de subespaço aleatório \cite{polikar2010}. 
+
+\subsection{Floresta de árvores aleatórias}
+
+Nesse sentido, em uma floresta de árvores aleatórias (\textit{Random Forest}) há uma combinação de preditores de árvores de modo que cada árvore depende dos valores de um vetor aleatório amostrado independentemente e com a mesma distribuição para todas as árvores da floresta \cite{Breiman_2001}.
+
+O Scikit-learn \cite{scikit-learn} é uma das mais populares bibliotecas para fazer aprendizado de máquina em Python \cite{Grus_2019}. Seus pacotes contêm diversos módulos, dos quais pode-se citar o \texttt{sklearn.tree}, onde estão os módulos necessários para árvores de decisão e, para florestas de árvores, o \texttt{sklearn.ensemble}.
+
+A complexidade assintótica do \emph{Random Forest}, sem limitações é $O(M\cdot N \cdot\log{N})$, onde $M$ é o número de árvores e $N$ é o número de amostras. É possível reduzir a complexidade alterando parâmetros que limitem o número mínimo de amostras para que o nó seja particionado (\texttt{min\_samples\_split}), o número máximo de nós folhas (\texttt{max\_leaf\_nodes}), a altura das árvores (\texttt{max\_depth}) e o número mínimo de amostras nas folhas (\texttt{min\_samples\_leaf}).
+
+A utilização é facilitada e basta inserir alguns parâmetros e a biblioteca encarrega-se do restante. Na sequência tem-se o código-fonte que carrega um conjunto de dados, seleciona-se os preditores e alvo, separa a base de teste, executa o algoritmo do Random Florest e por fim realiza a impressão da análise.
+
+
+\begin{listing}[H]
+\begin{minted}[frame=lines,fontsize=\footnotesize,breaklines,autogobble]{python}
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import recall_score
+from sklearn.metrics import confusion_matrix
+from sklearn.ensemble import RandomForestClassifier
+
+github = (
+    'https://raw.githubusercontent.com/ecostadelle/'+
+    'RandomForest/main/db/transforma.csv')
+df = pd.read_csv(github, sep = ';',decimal=",")
+X = df[['ira_nb1', 'ira_mr1', 'ira_nb3', 'rec_s1']]
+y = y=df[['resultado_final']]
+
+X_train, X_test, y_train, y_test = train_test_split(X, 
+                                                    y, 
+                                                    test_size=0.25, 
+                                                    random_state=123)
+rfc = RandomForestClassifier(bootstrap=True,
+                             n_estimators=10,
+                             max_depth=None,
+                             min_samples_split=2,
+                             random_state=0)
+rfc.fit(X_train, y_train.values.ravel())
+y_pred=rfc.predict(X_test)
+\end{minted}
+\caption{Exemplo de \emph{Random Forest} utilizando o Scikit-learn}
+\end{listing}
+
+No código-fonte anterior o parâmetro \textit{n\_estimators} define o número de árvores que serão geradas e a impressão destas pode ser feito pelo código-fonte que segue:
+
+\begin{listing}[H]
+\begin{minted}[frame=lines,fontsize=\footnotesize,breaklines]{python}
+from dtreeviz.trees import dtreeviz
+from sklearn import tree
+from matplotlib import pyplot as plt
+plt.rcParams.update({'figure.figsize': (12.0, 8.0)})
+plt.rcParams.update({'font.size': 14})
+plt.figure(figsize=(20,20))
+_ = tree.plot_tree(rfc.estimators_[0], 
+                    feature_names=X.columns,
+                    filled=True)
+\end{minted}
+\caption{Exemplo de Impressão de \emph{Random Forest} utilizando o Scikit-learn}
+\end{listing}
+
+Ao executar o código-fonte supracitado gera-se uma árvore escolhida no parâmetro \texttt{n\_estimators}, sendo um exemplo, a árvore a seguir. 
+
+\begin{figure}[H]
 \centering
-\includegraphics[width=.3\textwidth]{fig2.jpg}
-\caption{This figure is an example of a figure caption taking more than one
-  line and justified considering margins mentioned in Section~\ref{sec:figs}.}
-\label{fig:exampleFig2}
+\includegraphics[width=1\textwidth]{tree_0.png}
+\caption{Arvore 0 [0,9] do modelo treinado}
+\label{Tree}
 \end{figure}
-
-In tables, try to avoid the use of colored or shaded backgrounds, and avoid
-thick, doubled, or unnecessary framing lines. When reporting empirical data,
-do not use more decimal digits than warranted by their precision and
-reproducibility. Table caption must be placed before the table (see Table 1)
-and the font used must also be Helvetica, 10 point, boldface, with 6 points of
-space before and after each caption.
-
-\begin{table}[ht]
-\centering
-\caption{Variables to be considered on the evaluation of interaction
-  techniques}
-\label{tab:exTable1}
-\includegraphics[width=.7\textwidth]{table.jpg}
-\end{table}
-
-\section{Images}
-
-All images and illustrations should be in black-and-white, or gray tones,
-excepting for the papers that will be electronically available (on CD-ROMs,
-internet, etc.). The image resolution on paper should be about 600 dpi for
-black-and-white images, and 150-300 dpi for grayscale images.  Do not include
-images with excessive resolution, as they may take hours to print, without any
-visible difference in the result. 
-
-\section{References}
-
-Bibliographic references must be unambiguous and uniform.  We recommend giving
-the author names references in brackets, e.g. \cite{knuth:84},
-\cite{boulic:91}, and \cite{smith:99}.
-
-The references must be listed using 12 point font size, with 6 points of space
-before each reference. The first line of each reference should not be
-indented, while the subsequent should be indented by 0.5 cm.
 
 \bibliographystyle{sbc}
 \bibliography{sbc-template}
